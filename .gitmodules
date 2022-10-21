@@ -1,0 +1,6 @@
+[submodule "libs/PcapPlusPlus"]
+	path = libs/PcapPlusPlus
+	url = https://github.com/clementperon/PcapPlusPlus.git
+[submodule "libs/benchmark"]
+	path = libs/benchmark
+	url = https://github.com/google/benchmark.git
