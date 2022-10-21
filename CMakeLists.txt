@@ -1,7 +1,11 @@
+cmake_minimum_required(VERSION 3.18)
+
 project(mmpr-benchmark VERSION 0.1.0 LANGUAGES CXX)
 
 # see /opt/local/share/cmake-3.16/Modules/FindGTest.cmake
 find_package(benchmark QUIET)
+
+add_subdirectory(libs/mmpr)
 
 if(NOT TARGET benchmark::benchmark)
     # Add googletest directly to our build. This defines
