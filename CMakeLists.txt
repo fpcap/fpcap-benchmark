@@ -2,34 +2,31 @@ cmake_minimum_required(VERSION 3.18)
 
 project(mmpr-benchmark VERSION 0.1.0 LANGUAGES CXX)
 
-# see /opt/local/share/cmake-3.16/Modules/FindGTest.cmake
-find_package(benchmark QUIET)
+set(CMAKE_BUILD_TYPE Release)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 
+# Memory-Mapping PCAP Reader (MMPR)
 add_subdirectory(libs/mmpr)
 
-if(NOT TARGET benchmark::benchmark)
-    # Add googletest directly to our build. This defines
-    # the benchmark targets.
-    set(BENCHMARK_ENABLE_TESTING OFF CACHE BOOL "" FORCE)
-    set(BENCHMARK_ENABLE_GTEST_TESTS OFF CACHE BOOL "" FORCE)
-    set(BENCHMARK_USE_BUNDLED_GTEST OFF CACHE BOOL "" FORCE)
-    add_subdirectory(libs/benchmark EXCLUDE_FROM_ALL)
-endif()
+# Google benchmark
+set(BENCHMARK_ENABLE_TESTING OFF CACHE BOOL "" FORCE)
+set(BENCHMARK_ENABLE_GTEST_TESTS OFF CACHE BOOL "" FORCE)
+set(BENCHMARK_USE_BUNDLED_GTEST OFF CACHE BOOL "" FORCE)
+add_subdirectory(libs/benchmark EXCLUDE_FROM_ALL)
 
-if(NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/libs/PcapPlusPlus)
-    message(FATAL_ERROR "[mmpr] Could not find benchmark/libs/PcapPlusPlus")
-else()
-    # Add PcapPP target
-    add_subdirectory(libs/PcapPlusPlus)
-endif()
+# PcapPlusPlus
+add_subdirectory(libs/PcapPlusPlus)
 
 add_executable(mmpr_benchmark
     src/main.cpp
     src/packet_reading.cpp
 )
 target_compile_features(mmpr_benchmark PRIVATE cxx_std_11)
-target_link_libraries(mmpr_benchmark benchmark::benchmark mmpr::mmpr PcapPP pcap)
-
-add_test(NAME mmpr_benchmark
-    COMMAND mmpr_benchmark
+target_link_libraries(mmpr_benchmark
+    PRIVATE
+        benchmark::benchmark
+        mmpr::mmpr
+        PcapPP
+        pcap
 )

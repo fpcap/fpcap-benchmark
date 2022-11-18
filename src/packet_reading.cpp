@@ -2,7 +2,7 @@
 
 #include "mmpr/pcap/PcapReader.hpp"
 #include "mmpr/pcapng/PcapNgReader.hpp"
-#include <PcapFileDevice.h>
+#include "PcapFileDevice.h"
 #include <pcap.h>
 
 const static std::string inputFilePcap = "tracefiles/example.pcap";
