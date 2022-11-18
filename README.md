@@ -16,16 +16,16 @@ File: `example.(pcap|pcapng|pcapng.zst|pcapng.zstd)`
 ---------------------------------------------------------------------
 Benchmark                           Time             CPU   Iterations
 ---------------------------------------------------------------------
-mmpr (pcap)                  52257508 ns     10274420 ns           66
-mmpr-fread (pcap)             8997999 ns      1278095 ns         1000
-mmpr (pcapng)                61084662 ns     12835836 ns           55
-mmpr-fread (pcapng)           9906805 ns      1468925 ns          424
-mmpr (pcapng.zst)             8472729 ns      1926649 ns          353
-PcapPlusPlus (pcap)          52835971 ns     11080767 ns           64
-PcapPlusPlus (pcapng)        56371467 ns     12607466 ns           58
-PcapPlusPlus (pcapng.zstd)    9406092 ns      2923663 ns          246
-libpcap (pcap)               51586643 ns     10343324 ns           63
-libpcap (pcapng)             53033134 ns     10650106 ns           66
+mmpr (pcap)                  65178523 ns     14507273 ns           51
+mmpr-fread (pcap)             9903993 ns      1431813 ns          507
+mmpr (pcapng)                56407792 ns     11436369 ns           61
+mmpr-fread (pcapng)           8264006 ns      1106907 ns          614
+mmpr (pcapng.zst)             8866711 ns      2020582 ns          372
+PcapPlusPlus (pcap)          53472271 ns     11187879 ns           56
+PcapPlusPlus (pcapng)        58684604 ns     13140057 ns           61
+PcapPlusPlus (pcapng.zstd)    9014957 ns      2742154 ns          241
+libpcap (pcap)               52502548 ns     10682387 ns           68
+libpcap (pcapng)             57018837 ns     11996940 ns           60
 ```
 
 ### 18.11.2022
