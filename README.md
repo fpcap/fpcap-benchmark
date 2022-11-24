@@ -51,3 +51,27 @@ PcapPlusPlus (pcapng.zstd)    8941969 ns      2699589 ns          259
 libpcap (pcap)               51376836 ns     10413706 ns           67
 libpcap (pcapng)             52536349 ns     10585561 ns           66
 ```
+
+### 24.11.2022
+
+MMPR: `539168017ce54b6a84cf4eab8a646fb4b88ecaf7` (feature/move-code-from-headers-to-cpp)
+
+PcapPlusPlus: `a7326003891b3d82fabe2b84c98ccf5ba442b4f3`
+
+File: `example.(pcap|pcapng|pcapng.zst|pcapng.zstd)`
+
+```
+---------------------------------------------------------------------
+Benchmark                           Time             CPU   Iterations
+---------------------------------------------------------------------
+mmpr (pcap)                  55305059 ns     11354455 ns           65
+mmpr-fread (pcap)             8729938 ns      1237597 ns          585
+mmpr (pcapng)                54033123 ns     10694745 ns           67
+mmpr-fread (pcapng)           8137800 ns      1074424 ns          612
+mmpr (pcapng.zst)             8076516 ns      1804078 ns          385
+PcapPlusPlus (pcap)          51511306 ns     10483894 ns           62
+PcapPlusPlus (pcapng)        53430211 ns     11567145 ns           60
+PcapPlusPlus (pcapng.zstd)    9181265 ns      2826843 ns          253
+libpcap (pcap)               51366550 ns     10124561 ns           69
+libpcap (pcapng)             52027888 ns     10341321 ns           68
+```
