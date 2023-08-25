@@ -1,7 +1,7 @@
 #include <benchmark/benchmark.h>
 
-#include "mmpr/pcap/PcapReader.hpp"
-#include "mmpr/pcapng/PcapNgReader.hpp"
+#include "fpcap/pcap/PcapReader.hpp"
+#include "fpcap/pcapng/PcapNgReader.hpp"
 #include "PcapFileDevice.h"
 #include <pcap.h>
 
@@ -10,10 +10,10 @@ const static std::string inputFilePcapNg = "tracefiles/example.pcapng";
 const static std::string inputFilePcapNgZst = inputFilePcapNg + ".zst";
 const static std::string inputFilePcapNgZstd = inputFilePcapNg + ".zstd";
 
-static void bmMmprPcap(benchmark::State& state) {
-    mmpr::Packet packet;
+static void bmFpcapPcap(benchmark::State& state) {
+    fpcap::Packet packet;
     for (auto _ : state) {
-        mmpr::MMPcapReader reader(inputFilePcap);
+        fpcap::MMPcapReader reader(inputFilePcap);
 
         uint64_t packetCount{0};
         while (!reader.isExhausted()) {
@@ -27,10 +27,10 @@ static void bmMmprPcap(benchmark::State& state) {
     benchmark::DoNotOptimize(packet);
 }
 
-static void bmMmprPcapFRead(benchmark::State& state) {
-    mmpr::Packet packet;
+static void bmFpcapPcapFRead(benchmark::State& state) {
+    fpcap::Packet packet;
     for (auto _ : state) {
-        mmpr::FReadPcapReader reader(inputFilePcap);
+        fpcap::FReadPcapReader reader(inputFilePcap);
 
         uint64_t packetCount{0};
         while (!reader.isExhausted()) {
@@ -44,10 +44,10 @@ static void bmMmprPcapFRead(benchmark::State& state) {
     benchmark::DoNotOptimize(packet);
 }
 
-static void bmMmprPcapNG(benchmark::State& state) {
-    mmpr::Packet packet;
+static void bmFpcapPcapNG(benchmark::State& state) {
+    fpcap::Packet packet;
     for (auto _ : state) {
-        mmpr::MMPcapNgReader reader(inputFilePcapNg);
+        fpcap::MMPcapNgReader reader(inputFilePcapNg);
 
         uint64_t packetCount{0};
         while (!reader.isExhausted()) {
@@ -61,10 +61,10 @@ static void bmMmprPcapNG(benchmark::State& state) {
     benchmark::DoNotOptimize(packet);
 }
 
-static void bmMmprPcapNGFRead(benchmark::State& state) {
-    mmpr::Packet packet;
+static void bmFpcapPcapNGFRead(benchmark::State& state) {
+    fpcap::Packet packet;
     for (auto _ : state) {
-        mmpr::FReadPcapNgReader reader(inputFilePcapNg);
+        fpcap::FReadPcapNgReader reader(inputFilePcapNg);
 
         uint64_t packetCount{0};
         while (!reader.isExhausted()) {
@@ -78,10 +78,10 @@ static void bmMmprPcapNGFRead(benchmark::State& state) {
     benchmark::DoNotOptimize(packet);
 }
 
-static void bmMmprPcapNGZst(benchmark::State& state) {
-    mmpr::Packet packet;
+static void bmFpcapPcapNGZst(benchmark::State& state) {
+    fpcap::Packet packet;
     for (auto _ : state) {
-        mmpr::ZstdPcapNgReader reader(inputFilePcapNgZst);
+        fpcap::ZstdPcapNgReader reader(inputFilePcapNgZst);
 
         uint64_t packetCount{0};
         while (!reader.isExhausted()) {
@@ -187,11 +187,11 @@ static void bmLibpcapPcapNG(benchmark::State& state) {
     benchmark::DoNotOptimize(packet);
 }
 
-BENCHMARK(bmMmprPcap)->Name("mmpr (pcap)");
-BENCHMARK(bmMmprPcapFRead)->Name("mmpr-fread (pcap)");
-BENCHMARK(bmMmprPcapNG)->Name("mmpr (pcapng)");
-BENCHMARK(bmMmprPcapNGFRead)->Name("mmpr-fread (pcapng)");
-BENCHMARK(bmMmprPcapNGZst)->Name("mmpr (pcapng.zst)");
+BENCHMARK(bmFpcapPcap)->Name("fpcap (pcap)");
+BENCHMARK(bmFpcapPcapFRead)->Name("fpcap-fread (pcap)");
+BENCHMARK(bmFpcapPcapNG)->Name("fpcap (pcapng)");
+BENCHMARK(bmFpcapPcapNGFRead)->Name("fpcap-fread (pcapng)");
+BENCHMARK(bmFpcapPcapNGZst)->Name("fpcap (pcapng.zst)");
 BENCHMARK(bmPcapPlusPlusPcap)->Name("PcapPlusPlus (pcap)");
 BENCHMARK(bmPcapPlusPlusPcapNG)->Name("PcapPlusPlus (pcapng)");
 BENCHMARK(bmPcapPlusPlusPcapNGZstd)->Name("PcapPlusPlus (pcapng.zstd)");
