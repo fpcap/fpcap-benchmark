@@ -1,8 +1,8 @@
 #include <benchmark/benchmark.h>
 
+#include "PcapFileDevice.h"
 #include "fpcap/pcap/PcapReader.hpp"
 #include "fpcap/pcapng/PcapNgReader.hpp"
-#include "PcapFileDevice.h"
 #include <pcap.h>
 
 const static std::string inputFilePcap = "tracefiles/example.pcap";
@@ -10,181 +10,187 @@ const static std::string inputFilePcapNg = "tracefiles/example.pcapng";
 const static std::string inputFilePcapNgZst = inputFilePcapNg + ".zst";
 const static std::string inputFilePcapNgZstd = inputFilePcapNg + ".zstd";
 
+static uint64_t bytesSum(const uint8_t* data, const size_t length) {
+    uint64_t sum = 0;
+    for (auto i = 0u; i < length; ++i) {
+        benchmark::DoNotOptimize(sum += data[i]);
+    }
+    return sum;
+}
+
 static void bmFpcapPcap(benchmark::State& state) {
-    fpcap::Packet packet;
     for (auto _ : state) {
         fpcap::MMPcapReader reader(inputFilePcap);
 
-        uint64_t packetCount{0};
+        uint64_t packetCount = 0;
+        fpcap::Packet packet;
         while (!reader.isExhausted()) {
             if (reader.readNextPacket(packet)) {
-                ++packetCount;
+                benchmark::DoNotOptimize(packetCount +=
+                                         bytesSum(packet.data, packet.captureLength));
             }
         }
 
         benchmark::ClobberMemory();
     }
-    benchmark::DoNotOptimize(packet);
 }
 
 static void bmFpcapPcapFRead(benchmark::State& state) {
-    fpcap::Packet packet;
     for (auto _ : state) {
         fpcap::FReadPcapReader reader(inputFilePcap);
 
-        uint64_t packetCount{0};
+        uint64_t packetCount = 0;
+        fpcap::Packet packet;
         while (!reader.isExhausted()) {
             if (reader.readNextPacket(packet)) {
-                ++packetCount;
+                benchmark::DoNotOptimize(packetCount +=
+                                         bytesSum(packet.data, packet.captureLength));
             }
         }
 
         benchmark::ClobberMemory();
     }
-    benchmark::DoNotOptimize(packet);
 }
 
 static void bmFpcapPcapNG(benchmark::State& state) {
-    fpcap::Packet packet;
     for (auto _ : state) {
         fpcap::MMPcapNgReader reader(inputFilePcapNg);
 
-        uint64_t packetCount{0};
+        uint64_t packetCount = 0;
+        fpcap::Packet packet;
         while (!reader.isExhausted()) {
             if (reader.readNextPacket(packet)) {
-                ++packetCount;
+                benchmark::DoNotOptimize(packetCount +=
+                                         bytesSum(packet.data, packet.captureLength));
             }
         }
 
         benchmark::ClobberMemory();
     }
-    benchmark::DoNotOptimize(packet);
 }
 
 static void bmFpcapPcapNGFRead(benchmark::State& state) {
-    fpcap::Packet packet;
     for (auto _ : state) {
         fpcap::FReadPcapNgReader reader(inputFilePcapNg);
 
-        uint64_t packetCount{0};
+        uint64_t packetCount = 0;
+        fpcap::Packet packet;
         while (!reader.isExhausted()) {
             if (reader.readNextPacket(packet)) {
-                ++packetCount;
+                benchmark::DoNotOptimize(packetCount +=
+                                         bytesSum(packet.data, packet.captureLength));
             }
         }
 
         benchmark::ClobberMemory();
     }
-    benchmark::DoNotOptimize(packet);
 }
 
 static void bmFpcapPcapNGZst(benchmark::State& state) {
-    fpcap::Packet packet;
     for (auto _ : state) {
         fpcap::ZstdPcapNgReader reader(inputFilePcapNgZst);
 
-        uint64_t packetCount{0};
+        uint64_t packetCount = 0;
+        fpcap::Packet packet;
         while (!reader.isExhausted()) {
             if (reader.readNextPacket(packet)) {
-                ++packetCount;
+                benchmark::DoNotOptimize(packetCount +=
+                                         bytesSum(packet.data, packet.captureLength));
             }
         }
 
         benchmark::ClobberMemory();
     }
-    benchmark::DoNotOptimize(packet);
 }
 
 static void bmPcapPlusPlusPcap(benchmark::State& state) {
-    pcpp::RawPacket packet;
     for (auto _ : state) {
         pcpp::PcapFileReaderDevice reader(inputFilePcap);
         reader.open();
 
-        uint64_t packetCount{0};
+        uint64_t packetCount = 0;
+        pcpp::RawPacket packet;
         while (reader.getNextPacket(packet)) {
-            ++packetCount;
+            benchmark::DoNotOptimize(
+                packetCount += bytesSum(packet.getRawData(), packet.getRawDataLen()));
         }
 
         reader.close();
 
         benchmark::ClobberMemory();
     }
-    benchmark::DoNotOptimize(packet);
 }
 
 static void bmPcapPlusPlusPcapNG(benchmark::State& state) {
-    pcpp::RawPacket packet;
     for (auto _ : state) {
         pcpp::PcapNgFileReaderDevice reader(inputFilePcapNg);
         reader.open();
 
-        uint64_t packetCount{0};
+        uint64_t packetCount = 0;
+        pcpp::RawPacket packet;
         while (reader.getNextPacket(packet)) {
-            ++packetCount;
+            benchmark::DoNotOptimize(
+                packetCount += bytesSum(packet.getRawData(), packet.getRawDataLen()));
         }
 
         reader.close();
 
         benchmark::ClobberMemory();
     }
-    benchmark::DoNotOptimize(packet);
 }
 
 static void bmPcapPlusPlusPcapNGZstd(benchmark::State& state) {
-    pcpp::RawPacket packet;
     for (auto _ : state) {
         pcpp::PcapNgFileReaderDevice reader(inputFilePcapNgZstd);
         reader.open();
 
-        uint64_t packetCount{0};
+        uint64_t packetCount = 0;
+        pcpp::RawPacket packet;
         while (reader.getNextPacket(packet)) {
-            ++packetCount;
+            benchmark::DoNotOptimize(
+                packetCount += bytesSum(packet.getRawData(), packet.getRawDataLen()));
         }
 
         reader.close();
 
         benchmark::ClobberMemory();
     }
-    benchmark::DoNotOptimize(packet);
 }
 
 static void bmLibpcapPcap(benchmark::State& state) {
-    const std::uint8_t* packet;
     for (auto _ : state) {
         char errBuf[PCAP_ERRBUF_SIZE];
         pcap_t* pcapHandle = pcap_open_offline(inputFilePcap.c_str(), errBuf);
 
-        uint64_t packetCount{0};
+        uint64_t packetCount = 0;
         pcap_pkthdr header;
+        const std::uint8_t* packet;
         while ((packet = pcap_next(pcapHandle, &header))) {
-            ++packetCount;
+            benchmark::DoNotOptimize(packetCount += bytesSum(packet, header.caplen));
         }
 
         pcap_close(pcapHandle);
 
         benchmark::ClobberMemory();
     }
-    benchmark::DoNotOptimize(packet);
 }
 
 static void bmLibpcapPcapNG(benchmark::State& state) {
-    const std::uint8_t* packet;
     for (auto _ : state) {
         char errBuf[PCAP_ERRBUF_SIZE];
         pcap_t* pcapHandle = pcap_open_offline(inputFilePcapNg.c_str(), errBuf);
 
-        uint64_t packetCount{0};
+        uint64_t packetCount = 0;
         pcap_pkthdr header;
+        const std::uint8_t* packet;
         while ((packet = pcap_next(pcapHandle, &header))) {
-            ++packetCount;
+            benchmark::DoNotOptimize(packetCount += bytesSum(packet, header.caplen));
         }
 
         pcap_close(pcapHandle);
 
         benchmark::ClobberMemory();
     }
-    benchmark::DoNotOptimize(packet);
 }
 
 BENCHMARK(bmFpcapPcap)->Name("fpcap (pcap)");
