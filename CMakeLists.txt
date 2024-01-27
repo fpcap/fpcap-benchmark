@@ -6,7 +6,7 @@ set(CMAKE_BUILD_TYPE Release)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 
-# Memory-Mapping PCAP Reader (MMPR)
+# Memory-Mapping PCAP Reader (FPCAP)
 add_subdirectory(libs/fpcap)
 
 # Google benchmark
