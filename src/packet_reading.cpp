@@ -1,8 +1,7 @@
 #include <benchmark/benchmark.h>
 
 #include "PcapFileDevice.h"
-#include "fpcap/pcap/PcapReader.hpp"
-#include "fpcap/pcapng/PcapNgReader.hpp"
+#include <fpcap/fpcap.hpp>
 #include <pcap.h>
 
 const static std::string inputFilePcap = "tracefiles/example.pcap";
@@ -20,12 +19,12 @@ static uint64_t bytesSum(const uint8_t* data, const size_t length) {
 
 static void bmFpcapPcap(benchmark::State& state) {
     for (auto _ : state) {
-        fpcap::MMPcapReader reader(inputFilePcap);
+        fpcap::PacketReader reader(inputFilePcap, true);
 
         uint64_t packetCount = 0;
         fpcap::Packet packet;
         while (!reader.isExhausted()) {
-            if (reader.readNextPacket(packet)) {
+            if (reader.nextPacket(packet)) {
                 benchmark::DoNotOptimize(packetCount +=
                                          bytesSum(packet.data, packet.captureLength));
             }
@@ -37,12 +36,12 @@ static void bmFpcapPcap(benchmark::State& state) {
 
 static void bmFpcapPcapFRead(benchmark::State& state) {
     for (auto _ : state) {
-        fpcap::FReadPcapReader reader(inputFilePcap);
+        fpcap::PacketReader reader(inputFilePcap, false);
 
         uint64_t packetCount = 0;
         fpcap::Packet packet;
         while (!reader.isExhausted()) {
-            if (reader.readNextPacket(packet)) {
+            if (reader.nextPacket(packet)) {
                 benchmark::DoNotOptimize(packetCount +=
                                          bytesSum(packet.data, packet.captureLength));
             }
@@ -54,12 +53,12 @@ static void bmFpcapPcapFRead(benchmark::State& state) {
 
 static void bmFpcapPcapNG(benchmark::State& state) {
     for (auto _ : state) {
-        fpcap::MMPcapNgReader reader(inputFilePcapNg);
+        fpcap::PacketReader reader(inputFilePcapNg, true);
 
         uint64_t packetCount = 0;
         fpcap::Packet packet;
         while (!reader.isExhausted()) {
-            if (reader.readNextPacket(packet)) {
+            if (reader.nextPacket(packet)) {
                 benchmark::DoNotOptimize(packetCount +=
                                          bytesSum(packet.data, packet.captureLength));
             }
@@ -71,12 +70,12 @@ static void bmFpcapPcapNG(benchmark::State& state) {
 
 static void bmFpcapPcapNGFRead(benchmark::State& state) {
     for (auto _ : state) {
-        fpcap::FReadPcapNgReader reader(inputFilePcapNg);
+        fpcap::PacketReader reader(inputFilePcapNg, false);
 
         uint64_t packetCount = 0;
         fpcap::Packet packet;
         while (!reader.isExhausted()) {
-            if (reader.readNextPacket(packet)) {
+            if (reader.nextPacket(packet)) {
                 benchmark::DoNotOptimize(packetCount +=
                                          bytesSum(packet.data, packet.captureLength));
             }
@@ -88,12 +87,12 @@ static void bmFpcapPcapNGFRead(benchmark::State& state) {
 
 static void bmFpcapPcapNGZst(benchmark::State& state) {
     for (auto _ : state) {
-        fpcap::ZstdPcapNgReader reader(inputFilePcapNgZst);
+        fpcap::PacketReader reader(inputFilePcapNgZst);
 
         uint64_t packetCount = 0;
         fpcap::Packet packet;
         while (!reader.isExhausted()) {
-            if (reader.readNextPacket(packet)) {
+            if (reader.nextPacket(packet)) {
                 benchmark::DoNotOptimize(packetCount +=
                                          bytesSum(packet.data, packet.captureLength));
             }

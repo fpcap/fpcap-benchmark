@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.18)
 project(fpcap-benchmark VERSION 0.1.0 LANGUAGES CXX)
 
 set(CMAKE_BUILD_TYPE Release)
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 
 # Memory-Mapping PCAP Reader (FPCAP)
 add_subdirectory(libs/fpcap)
@@ -21,7 +21,6 @@ add_executable(fpcap_benchmark
     src/main.cpp
     src/packet_reading.cpp
 )
-target_compile_features(fpcap_benchmark PRIVATE cxx_std_11)
 target_compile_options(fpcap_benchmark PRIVATE -O3)
 target_link_libraries(fpcap_benchmark
     PRIVATE
