@@ -9,7 +9,6 @@
 const static std::string inputFilePcap = "tracefiles/example.pcap";
 const static std::string inputFilePcapNg = "tracefiles/example.pcapng";
 const static std::string inputFilePcapNgZst = inputFilePcapNg + ".zst";
-const static std::string inputFilePcapNgZstd = inputFilePcapNg + ".zstd";
 
 static constexpr uint64_t EXPECTED_PACKETS = 4631;
 
@@ -192,9 +191,9 @@ static void bmPcapPlusPlusPcapNG(benchmark::State& state) {
     }
 }
 
-static void bmPcapPlusPlusPcapNGZstd(benchmark::State& state) {
+static void bmPcapPlusPlusPcapNGZst(benchmark::State& state) {
     for (auto _ : state) {
-        pcpp::PcapNgFileReaderDevice reader(inputFilePcapNgZstd);
+        pcpp::PcapNgFileReaderDevice reader(inputFilePcapNgZst);
         reader.open();
 
         uint64_t bytesTotal = 0;
@@ -274,6 +273,6 @@ BENCHMARK(bmFpcapPcapNGFRead)->Name("fpcap-fread (pcapng)");
 BENCHMARK(bmFpcapPcapNGZst)->Name("fpcap (pcapng.zst)");
 BENCHMARK(bmPcapPlusPlusPcap)->Name("PcapPlusPlus (pcap)");
 BENCHMARK(bmPcapPlusPlusPcapNG)->Name("PcapPlusPlus (pcapng)");
-BENCHMARK(bmPcapPlusPlusPcapNGZstd)->Name("PcapPlusPlus (pcapng.zstd)");
+BENCHMARK(bmPcapPlusPlusPcapNGZst)->Name("PcapPlusPlus (pcapng.zst)");
 BENCHMARK(bmLibpcapPcap)->Name("libpcap (pcap)");
 BENCHMARK(bmLibpcapPcapNG)->Name("libpcap (pcapng)");
