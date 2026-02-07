@@ -16,8 +16,9 @@ static constexpr uint64_t EXPECTED_PACKETS = 4631;
 static uint64_t bytesSum(const uint8_t* data, const size_t length) {
     uint64_t sum = 0;
     for (auto i = 0u; i < length; ++i) {
-        benchmark::DoNotOptimize(sum += data[i]);
+        sum += data[i];
     }
+    benchmark::DoNotOptimize(sum);
     return sum;
 }
 
