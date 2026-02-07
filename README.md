@@ -2,6 +2,22 @@
 
 Benchmark for fpcap - "A fast and lightweight PCAP file reading library"
 
+## Build
+
+### Windows
+
+Download Npcap SDK and Installer from https://npcap.com/#download
+
+Run the Npcap installer and unpack the SDK and add the directory to your PATH.
+
+Get zstd, unpack and add it to PATH https://github.com/facebook/zstd/releases/tag/v1.5.7
+
+Run CMake with:
+
+```
+-DPCAP_ROOT=C:\npcap-sdk-1.16 -DZSTD_ROOT=C:\zstd-v1.5.7-win64 -DZSTD_LIBRARY=C:\zstd-v1.5.7-win64\dll\libzstd.dll.a
+```
+
 ## Disabling CPU Frequency Scaling
 
 If you see this error:
@@ -39,6 +55,58 @@ Wiki [Cpu frequency scaling](https://wiki.archlinux.org/title/CPU_frequency_scal
 looking for options.
 
 ## Benchmark results
+
+### 07.02.2026
+
+FPCAP: v0.2.0
+
+PcapPlusPlus: v25.05
+
+File: `example.(pcap|pcapng|pcapng.zst|pcapng.zstd)`
+
+OS: Windows 11 Pro
+
+CPU: 12th Gen Intel(R) Core(TM) i9-12900KS (3.40 GHz)
+
+RAM: 64GB DDR5
+
+Raw benchmark output:
+
+```
+---------------------------------------------------------------------
+Benchmark                           Time             CPU   Iterations
+---------------------------------------------------------------------
+fpcap (pcap)                  3021247 ns      2780720 ns          236
+fpcap-fread (pcap)            3472708 ns      3125000 ns          195
+fpcap (pcapng)                2881581 ns      2722538 ns          264
+fpcap-fread (pcapng)          3443721 ns      3446691 ns          204
+fpcap (pcapng.zst)            4782850 ns      4768669 ns          154
+PcapPlusPlus (pcap)           4199388 ns      4269622 ns          172
+PcapPlusPlus (pcapng)         5477204 ns      5301339 ns          112
+PcapPlusPlus (pcapng.zstd)    5222558 ns      5022321 ns          112
+libpcap (pcap)                3907070 ns      3927139 ns          187
+libpcap (pcapng)              4211563 ns      4277235 ns          179
+```
+
+Iterations (higher is better):
+
+```                                                                                                                                                                                                                                                                                                               
+.pcap                                
+  fpcap          █████████████████████████████████████████████       236
+  fpcap-fread    █████████████████████████████████████               195
+  libpcap        ███████████████████████████████████                 187
+  PcapPlusPlus   █████████████████████████████████                   172
+
+.pcapng
+  fpcap          ██████████████████████████████████████████████████  264
+  fpcap-fread    ███████████████████████████████████████             204
+  libpcap        ██████████████████████████████████                  179
+  PcapPlusPlus   █████████████████████                               112
+
+.pcapng.zst(d)
+  fpcap          █████████████████████████████████████████████████   154
+  PcapPlusPlus   █████████████████████                               112
+```
 
 ### 18.11.2022
 
