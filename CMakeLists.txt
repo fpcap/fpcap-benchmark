@@ -28,6 +28,7 @@ FetchContent_Declare(
 )
 
 # PcapPlusPlus
+set(LIGHT_PCAPNG_ZSTD ON CACHE BOOL "" FORCE)
 FetchContent_Declare(
     PcapPlusPlus
     GIT_REPOSITORY https://github.com/seladb/PcapPlusPlus.git
