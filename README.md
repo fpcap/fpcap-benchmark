@@ -63,3 +63,4 @@ FPCAP v0.2.0, PcapPlusPlus v25.05, Npcap 1.87
 Windows 11, Intel i9-12900KS, 64gb
 
 ![Benchmark Results](benchmarks/2026-02-08/benchmark_results.png)
+![Benchmark Results](benchmarks/2026-02-08/benchmark_results_10gb.png)
